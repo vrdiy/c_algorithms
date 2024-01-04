@@ -1,3 +1,4 @@
+#include<stdio.h>
 #include<check.h>
 #include"test_suites.h"
 #include"../core/c_algorithms.h"
@@ -5,9 +6,12 @@
 START_TEST (CHECK_DEFAULTS)
 {
     SortedInts *s;
-    s = SortedIntsCreate(0);
-    ck_assert_int_eq(0,SortedIntsSize(s));
-    ck_assert_ptr_eq(NULL,SortedIntsArr(s));
+    s = SortedIntsCreate(4);
+    SortedIntsPrintValues(s);
+    ck_assert_int_eq(4,SortedIntsSize(s));
+    ck_assert_int_eq(0,SortedIntsArr(s)[0]);
+    SortedIntsFree(&s);
+    ck_assert_ptr_eq(NULL,s);
 
 }
 END_TEST
