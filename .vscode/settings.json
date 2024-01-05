@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "stdio.h": "c"
+        "*.mcfunction": "mcfunction",
+        "stdio.h": "c",
+        "c_algorithms.h": "c"
     }
 }
