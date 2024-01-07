@@ -1,9 +1,12 @@
 #include<stdio.h>
+#include<time.h>
+
 #include<check.h>
+
 #include"test_suites.h"
 #include"../core/c_algorithms.h"
 
-START_TEST (CHECK_DEFAULTS)
+START_TEST (DEFAULTS)
 {
     SortedInts *s;
     s = SortedIntsCreate(4,NULL);
@@ -13,7 +16,7 @@ START_TEST (CHECK_DEFAULTS)
     ck_assert_ptr_eq(NULL,s);
 }
 END_TEST
-START_TEST (CHECK_ODD_NON_DEFAULT)
+START_TEST (ODD_NON_DEFAULT)
 {
     SortedInts *s;
     int testArr[5] = {1,4,9,12,25};
@@ -28,7 +31,7 @@ START_TEST (CHECK_ODD_NON_DEFAULT)
     ck_assert_ptr_eq(NULL,s);
 }
 END_TEST
-START_TEST (CHECK_EVEN_NON_DEFAULT)
+START_TEST (EVEN_NON_DEFAULT)
 {
     SortedInts *s;
     int testArr[6] = {1,4,9,12,25,80};
@@ -43,7 +46,7 @@ START_TEST (CHECK_EVEN_NON_DEFAULT)
     ck_assert_ptr_eq(NULL,s);
 }
 END_TEST
-START_TEST (CHECK_INSERT)
+START_TEST (INSERT)
 {
     SortedInts *s;
     int testArr[6] = {1,4,9,12,25,80};
@@ -55,7 +58,7 @@ START_TEST (CHECK_INSERT)
     ck_assert_ptr_eq(NULL,s);
 }
 END_TEST
-START_TEST (CHECK_BAD_INSERT)
+START_TEST (BAD_INSERT)
 {
     SortedInts *s;
     int testArr[6] = {1,4,9,12,25,80};
@@ -67,7 +70,7 @@ START_TEST (CHECK_BAD_INSERT)
     ck_assert_ptr_eq(NULL,s);
 }
 END_TEST
-START_TEST (CHECK_INSERT_AT_ENDS)
+START_TEST (INSERT_AT_ENDS)
 {
     SortedInts *s;
     int testArr[6] = {1,4,9,12,25,80};
@@ -83,19 +86,80 @@ START_TEST (CHECK_INSERT_AT_ENDS)
     ck_assert_ptr_eq(NULL,s);
 }
 END_TEST
+START_TEST (INSERT_EQUAL_ENDS)
+{
+    SortedInts *s;
+    int arr[5] = {1,6,7,13,67};
+    s = SortedIntsCreate(5,arr);
+    ck_assert_int_eq(5,SortedIntsSize(s));
+    ck_assert_int_eq(-1,SortedIntsInsert(s,1));
+    ck_assert_int_eq(-1,SortedIntsInsert(s,67));
+    ck_assert_int_eq(8,SortedIntsArrMemSize(s));
+    SortedIntsFree(&s);
+    ck_assert_ptr_eq(NULL,s);
+}
+END_TEST
+START_TEST (DELETIONS)
+{
+    SortedInts *s;
+    int testArr[6] = {1,4,9,12,25,80};
+    s = SortedIntsCreate(6,testArr);
+    ck_assert_int_eq(1,SortedIntsRemove(s,9));
+    ck_assert_int_eq(8,SortedIntsArrMemSize(s));
+    ck_assert_int_eq(5,SortedIntsSize(s));
+
+    ck_assert_int_eq(12,SortedIntsArr(s)[2]);
+
+    ck_assert_int_eq(1,SortedIntsRemove(s,1));
+    ck_assert_int_eq(4,SortedIntsArr(s)[0]);
+    ck_assert_int_eq(1,SortedIntsRemove(s,80));
+    ck_assert_int_eq(25,SortedIntsArr(s)[SortedIntsSize(s)-1]);
+    SortedIntsFree(&s);
+    ck_assert_ptr_eq(NULL,s);
+}
+END_TEST
+START_TEST (ONE_MILLION_INSERTIONS)
+{
+    SortedInts *s;
+    s = SortedIntsCreate(0,NULL);
+    ck_assert_int_eq(0,SortedIntsSize(s));
+    for (int i = 1; i < 1000000; i++){
+        SortedIntsInsert(s,i);
+    }
+    ck_assert_int_eq(1048576,SortedIntsArrMemSize(s));
+    SortedIntsFree(&s);
+    ck_assert_ptr_eq(NULL,s);
+}
+END_TEST
+START_TEST (TEN_MILLION_INSERTIONS)
+{
+    SortedInts *s;
+    s = SortedIntsCreate(0,NULL);
+    ck_assert_int_eq(0,SortedIntsSize(s));
+    for (int i = 1; i < 10000000; i++){
+        SortedIntsInsert(s,i);
+    }
+    ck_assert_int_eq(16777216,SortedIntsArrMemSize(s));
+    SortedIntsFree(&s);
+    ck_assert_ptr_eq(NULL,s);
+}
+END_TEST
 Suite * sortedints_suite(void){
     Suite *s;
     TCase *tc_core;
     s = suite_create("Check SortedInt");
     tc_core = tcase_create("Core");
-    tcase_add_test(tc_core, CHECK_DEFAULTS);
-    tcase_add_test(tc_core, CHECK_ODD_NON_DEFAULT);
-    tcase_add_test(tc_core, CHECK_EVEN_NON_DEFAULT);
-    tcase_add_test(tc_core, CHECK_INSERT);
-    tcase_add_test(tc_core, CHECK_BAD_INSERT);
-    tcase_add_test(tc_core, CHECK_INSERT_AT_ENDS);
-
-
+    tcase_add_test(tc_core, DEFAULTS);
+    tcase_add_test(tc_core, ODD_NON_DEFAULT);
+    tcase_add_test(tc_core, EVEN_NON_DEFAULT);
+    tcase_add_test(tc_core, INSERT);
+    tcase_add_test(tc_core, BAD_INSERT);
+    tcase_add_test(tc_core, INSERT_AT_ENDS);
+    tcase_add_test(tc_core, INSERT_EQUAL_ENDS);
+    tcase_add_test(tc_core, DELETIONS);
+    tcase_add_test(tc_core, ONE_MILLION_INSERTIONS);
+    tcase_add_test(tc_core, TEN_MILLION_INSERTIONS);
+    tcase_set_timeout(tc_core, 4);
     suite_add_tcase(s, tc_core);
     return s;
 }

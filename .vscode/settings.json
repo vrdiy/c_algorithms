@@ -3,5 +3,11 @@
         "*.mcfunction": "mcfunction",
         "stdio.h": "c",
         "c_algorithms.h": "c"
+    },
+    "workbench.colorTheme": "Visual Studio Dark - C++",
+    "editor.tokenColorCustomizations": {
+        "[Visual Studio Dark - C++]": {
+            "comments": "#ffad948f"
+        }
     }
 }
