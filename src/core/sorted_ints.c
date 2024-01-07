@@ -8,8 +8,11 @@ struct SortedInts
     unsigned int allocated_size; // Always a power of 2
 
 };
-// Creates a SortedInts with an array of (size), can be passed an array to initialize with or NULL for default values 0 to size-1
-SortedInts * SortedIntsCreate(unsigned int size, int*arr){ // does not check for orderliness of given arr
+/*
+    Creates a SortedInts with an array of (size), can be passed an array to initialize with or NULL for default values 0 to size-1
+    The array passed in will be sorted and made into a set.
+*/
+SortedInts * SortedIntsCreate(unsigned int size, int*arr){
     int amountOfBytesReserved = (sizeof(SortedInts));
 
     /*
@@ -19,18 +22,20 @@ SortedInts * SortedIntsCreate(unsigned int size, int*arr){ // does not check for
     */
     SortedInts *s = malloc(amountOfBytesReserved);
     s->allocated_size = size == 0 ? 1 : nextPowerOfTwo(size);
-    s->size = size;
     s->p_list = malloc(s->allocated_size*sizeof(int));
     if (s == NULL){
         return NULL;
     }
-    if (arr == NULL){
+    if (arr == NULL || size == 0){
         for(int i = 0; i < size; i++){
             s->p_list[i] = i;
         }
-    }else{ // populate with given values, does not check if given list is sorted
-        for(int i = 0; i < size; i++){
-            s->p_list[i] = arr[i];
+        s->size = size;
+    }else{ // Use insertion function for each element, making the list sorted set.
+        s->size = 1;
+        s->p_list[0] = arr[0];
+        for(int i = 1; i < size; i++){
+            SortedIntsInsert(s,arr[i]);
         }
     }
     return s;
@@ -94,14 +99,14 @@ int SortedIntsInsert(SortedInts * s,int a){
     if (s->p_list[endIndex] < a){               // insert at the end     
         return Insert(s,a,endIndex+1);
     }
+    if (s->p_list[startIndex] > a){             // insert at the start 
+        return Insert(s,a,startIndex);
+    }
     if (s->p_list[endIndex] == a){
         return -1;
     }
     if (s->p_list[startIndex] == a){
         return -1;
-    }
-    if (s->p_list[startIndex] > a){             // insert at the start 
-        return Insert(s,a,startIndex);
     }
 
     while (1){                                  // Will either return on found duplicate, or found the two values that surround our value 'a'       

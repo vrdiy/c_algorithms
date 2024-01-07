@@ -16,6 +16,16 @@ START_TEST (DEFAULTS)
     ck_assert_ptr_eq(NULL,s);
 }
 END_TEST
+START_TEST (ILLEGAL_EMPTY)
+{
+    SortedInts *s;
+    int test[0] = {};
+    s = SortedIntsCreate(0,test);
+    ck_assert_int_eq(0,SortedIntsSize(s));
+    SortedIntsFree(&s);
+    ck_assert_ptr_eq(NULL,s);
+}
+END_TEST
 START_TEST (ODD_NON_DEFAULT)
 {
     SortedInts *s;
@@ -42,6 +52,33 @@ START_TEST (EVEN_NON_DEFAULT)
     ck_assert_int_eq(5,SortedIntsFind(s,80));
     ck_assert_int_eq(0,SortedIntsFind(s,1));
     ck_assert_int_eq(-1,SortedIntsFind(s,7));
+    SortedIntsFree(&s);
+    ck_assert_ptr_eq(NULL,s);
+}
+END_TEST
+START_TEST (OOO_NON_DEFAULT) // out of order
+{
+    SortedInts *s;
+    int testArr[6] = {80,4,25,12,9,1};
+    int testArrSorted[6] = {1,4,9,12,25,80};
+    s = SortedIntsCreate(6,testArr);
+    for (int i = 0; i < SortedIntsSize(s)-1;i++){
+        ck_assert_int_eq(testArrSorted[i],SortedIntsArr(s)[i]);
+    }
+    SortedIntsFree(&s);
+    ck_assert_ptr_eq(NULL,s);
+}
+END_TEST
+START_TEST (OOO_DUPES) // out of order with dupes
+{
+    SortedInts *s;
+    int testArr[6] = {80,4,80,12,9,80};
+    int testArrSorted[4] = {4,9,12,80};
+    s = SortedIntsCreate(6,testArr);
+    ck_assert_int_eq(4,SortedIntsSize(s));
+    for (int i = 0; i < SortedIntsSize(s)-1;i++){
+        ck_assert_int_eq(testArrSorted[i],SortedIntsArr(s)[i]);
+    }
     SortedIntsFree(&s);
     ck_assert_ptr_eq(NULL,s);
 }
@@ -140,6 +177,9 @@ START_TEST (TEN_MILLION_INSERTIONS)
         SortedIntsInsert(s,i);
     }
     ck_assert_int_eq(16777216,SortedIntsArrMemSize(s));
+    ck_assert_int_eq(1,SortedIntsArr(s)[0]);
+    ck_assert_int_eq(9999999,SortedIntsArr(s)[9999998]);
+
     SortedIntsFree(&s);
     ck_assert_ptr_eq(NULL,s);
 }
@@ -150,8 +190,11 @@ Suite * sortedints_suite(void){
     s = suite_create("Check SortedInt");
     tc_core = tcase_create("Core");
     tcase_add_test(tc_core, DEFAULTS);
+    tcase_add_test(tc_core, ILLEGAL_EMPTY);
     tcase_add_test(tc_core, ODD_NON_DEFAULT);
     tcase_add_test(tc_core, EVEN_NON_DEFAULT);
+    tcase_add_test(tc_core, OOO_NON_DEFAULT);
+    tcase_add_test(tc_core, OOO_DUPES);
     tcase_add_test(tc_core, INSERT);
     tcase_add_test(tc_core, BAD_INSERT);
     tcase_add_test(tc_core, INSERT_AT_ENDS);
