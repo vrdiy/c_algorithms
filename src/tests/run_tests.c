@@ -7,11 +7,10 @@ int main(void){
     Suite *p_suite;
     SRunner *p_suiteRunner;
     int num_failed;
-    p_suite = numbers_suite();
+    p_suite = set_suite();
     p_suiteRunner = srunner_create(p_suite);
-    srunner_add_suite(p_suiteRunner,sortedints_suite());
-    srunner_add_suite(p_suiteRunner,bubblesort_suite());
-    srunner_run_all(p_suiteRunner, CK_NORMAL);
+    srunner_add_suite(p_suiteRunner,sorting_suite());
+    srunner_run_all(p_suiteRunner, CK_VERBOSE);
     num_failed = srunner_ntests_failed(p_suiteRunner);
     srunner_free(p_suiteRunner);
 

@@ -1,7 +1,7 @@
 #include "c_algorithms.h"
 #include <stdlib.h>
 #include <stdio.h>
-struct SortedInts
+struct Set
 {
     int *p_list;
     unsigned int size;
@@ -9,18 +9,18 @@ struct SortedInts
 
 };
 /*
-    Creates a SortedInts with an array of (size), can be passed an array to initialize with or NULL for default values 0 to size-1
+    Creates a Set with an array of (size), can be passed an array to initialize with or NULL for default values 0 to size-1
     The array passed in will be sorted and made into a set.
 */
-SortedInts * SortedIntsCreate(unsigned int size, int*arr){
-    int amountOfBytesReserved = (sizeof(SortedInts));
+Set * SetCreate(unsigned int size, int*arr){
+    int amountOfBytesReserved = (sizeof(Set));
 
     /*
         You must use the address of the pointer you assigned the result of malloc to free later.
         When you call free() you need to give it the address of the pointer you assigned to the memory
         So calling free() should be done on the address of s
     */
-    SortedInts *s = malloc(amountOfBytesReserved);
+    Set *s = malloc(amountOfBytesReserved);
     s->allocated_size = size == 0 ? 1 : nextPowerOfTwo(size);
     s->p_list = malloc(s->allocated_size*sizeof(int));
     if (s == NULL){
@@ -35,13 +35,13 @@ SortedInts * SortedIntsCreate(unsigned int size, int*arr){
         s->size = 1;
         s->p_list[0] = arr[0];
         for(int i = 1; i < size; i++){
-            SortedIntsInsert(s,arr[i]);
+            SetInsert(s,arr[i]);
         }
     }
     return s;
 }
 // Prints out the values and addresses of the members
-void SortedIntsPrintValues(SortedInts * s){
+void SetPrintValues(Set * s){
     printf("Address of s: %p\n",s);
     printf("Size is set to: %d\n",s->size);
     printf("Allocated memory for p_list: %d\n",s->allocated_size);
@@ -50,22 +50,22 @@ void SortedIntsPrintValues(SortedInts * s){
         printf("Address at i: %p\n",&s->p_list[i]);
     }
 }
-// Returns the array of SortedInts, can get the size with SortedIntsSize()
-int * SortedIntsArr(SortedInts * s){
+// Returns the array of Set, can get the size with SetSize()
+int * SetArr(Set * s){
     return s->p_list;
 }
-unsigned int SortedIntsArrMemSize(SortedInts * s){
+unsigned int SetArrMemSize(Set * s){
     return s->allocated_size;
 }
-// Returns size of the array returned by SortedIntsArr()
-unsigned int SortedIntsSize(SortedInts * s){
+// Returns size of the array returned by SetArr()
+unsigned int SetSize(Set * s){
     return s->size;
 }
 /*
     Allocates only the require amount of memory for the insert
     A better approach would likely be to allocate large segments at interval powers of 2
 */
-int Insert(SortedInts * s,int a, int index){ // Private
+int Insert(Set * s,int a, int index){ // Private
     // Check if there is already enough allocated size
     if (s->allocated_size > s->size+1){
         // No need to allocate
@@ -87,14 +87,14 @@ int Insert(SortedInts * s,int a, int index){ // Private
     return 1;
     
 }
-// Insert int a into SortedInts array. Returns 1 on success, -1 on failure
-int SortedIntsInsert(SortedInts * s,int a){
+// Insert int a into Set array. Returns 1 on success, -1 on failure
+int SetInsert(Set * s,int a){
     // This is an implementation of a binary search with a worst case time complexity of O(log N)
-    // Very similar to SortedIntsFind(), but here looking for a gap.
+    // Very similar to SetFind(), but here looking for a gap.
     // Returns 1 on successful insert, -1 on failure
     // Fails from value already in array or failure to resize array
     int startIndex = 0;                     
-    int endIndex = SortedIntsSize(s)-1;
+    int endIndex = SetSize(s)-1;
     int middlePoint = endIndex/2;
     if (s->p_list[endIndex] < a){               // insert at the end     
         return Insert(s,a,endIndex+1);
@@ -131,7 +131,7 @@ int SortedIntsInsert(SortedInts * s,int a){
     }
     return -1;
 }
-int Delete(SortedInts * s, int index){ // Private
+int Delete(Set * s, int index){ // Private
     int end_element = s->p_list[s->size-1]; // Need to copy last element before shrink
     unsigned int new_size = nextPowerOfTwo(s->size-1);
     if (new_size < s->allocated_size){ // List is now less than half its allocated size, free that memory
@@ -151,9 +151,9 @@ int Delete(SortedInts * s, int index){ // Private
     return 1;
 
 }
-// Remove int a from SortedInts array, Returns 1 on success, 0 if not in list already, -1 on failure
-int SortedIntsRemove(SortedInts * s, int a){
-    int index = SortedIntsFind(s,a);
+// Remove int a from Set array, Returns 1 on success, 0 if not in list already, -1 on failure
+int SetRemove(Set * s, int a){
+    int index = SetFind(s,a);
     if (index == -1){ // Element isn't in array
         return 0;
     }
@@ -165,10 +165,10 @@ int SortedIntsRemove(SortedInts * s, int a){
     }
 }
 // Returns index of element, -1 if not found
-int SortedIntsFind(SortedInts * s, int a){
+int SetFind(Set * s, int a){
     // This is an implementation of a binary search with a worst case time complexity of O(log N)
     int startIndex = 0;                     
-    int endIndex = SortedIntsSize(s)-1;
+    int endIndex = SetSize(s)-1;
     int middlePoint = endIndex/2;
     if (s->p_list[endIndex] == a){              // handle case of array size of 2
         return endIndex;
@@ -194,7 +194,7 @@ int SortedIntsFind(SortedInts * s, int a){
     }
     return -1;
 }
-void SortedIntsFree(SortedInts ** p_s){
+void SetFree(Set ** p_s){
     free((*p_s)->p_list);
     (*p_s)->p_list = NULL;
     free(*p_s);

@@ -1,15 +1,22 @@
 
-int addTwoNumbers(int a, int b);
+//--------Generic Algorithms----------------
 unsigned int nextPowerOfTwo(unsigned int a);
+
+//--------Sorting Algorithms----------------
 int bubbleSort(int * arr, unsigned int size);
+int selectionSort(int * arr, unsigned int size);
+
+//--------Generic Array Operations----------
 int compareParallelArrs(int * arr_a, int * arr_b, unsigned int size);
-typedef struct SortedInts SortedInts;
-SortedInts * SortedIntsCreate(unsigned int size, int * arr);
-int * SortedIntsArr(SortedInts * s);
-unsigned int SortedIntsSize(SortedInts * s);
-unsigned int SortedIntsArrMemSize(SortedInts * s);
-void SortedIntsPrintValues(SortedInts * s);
-int SortedIntsInsert(SortedInts * s,int a);
-int SortedIntsRemove(SortedInts * s, int a);
-int SortedIntsFind(SortedInts * s, int a);
-void SortedIntsFree(SortedInts ** s);
+
+//--------Set Structure---------------------
+typedef struct Set Set;
+Set * SetCreate(unsigned int size, int * arr);
+int * SetArr(Set * s);
+unsigned int SetSize(Set * s);
+unsigned int SetArrMemSize(Set * s);
+void SetPrintValues(Set * s);
+int SetInsert(Set * s,int a);
+int SetRemove(Set * s, int a);
+int SetFind(Set * s, int a);
+void SetFree(Set ** s);

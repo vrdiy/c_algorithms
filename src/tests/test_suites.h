@@ -1,4 +1,3 @@
 #include<check.h>
-Suite * numbers_suite(void);
-Suite * sortedints_suite(void);
-Suite * bubblesort_suite(void);
+Suite * set_suite(void);
+Suite * sorting_suite(void);
