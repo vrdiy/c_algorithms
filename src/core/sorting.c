@@ -24,3 +24,25 @@ int bubbleSort(int * arr, unsigned int size){
     }while(is_sorted != true);
     return 1;
 }
+
+int selectionSort(int * arr, unsigned int size){
+    if (size<2){
+        return 1;
+    }
+    unsigned int current_pos = 0;
+    int temp;
+    while(current_pos!=size-1){
+        unsigned int current_lowest = current_pos;
+        for (int i = current_pos; i < size; i++){
+            if(arr[i] < arr[current_lowest]){
+                current_lowest = i;
+            }
+        }
+        temp = arr[current_pos];
+        arr[current_pos] = arr[current_lowest];
+        arr[current_lowest] = temp;
+        current_pos += 1;
+    }
+    return 1;
+
+}
