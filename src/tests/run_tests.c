@@ -10,7 +10,8 @@ int main(void){
     p_suite = numbers_suite();
     p_suiteRunner = srunner_create(p_suite);
     srunner_add_suite(p_suiteRunner,sortedints_suite());
-    srunner_run_all(p_suiteRunner, CK_VERBOSE);
+    srunner_add_suite(p_suiteRunner,bubblesort_suite());
+    srunner_run_all(p_suiteRunner, CK_NORMAL);
     num_failed = srunner_ntests_failed(p_suiteRunner);
     srunner_free(p_suiteRunner);
 
