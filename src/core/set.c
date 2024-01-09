@@ -4,7 +4,7 @@
 struct Set
 {
     int *p_list;
-    unsigned int size;
+    size_t size;
     unsigned int allocated_size; // Always a power of 2
 
 };
@@ -12,7 +12,7 @@ struct Set
     Creates a Set with an array of (size), can be passed an array to initialize with or NULL for default values 0 to size-1
     The array passed in will be sorted and made into a set.
 */
-Set * SetCreate(unsigned int size, int*arr){
+Set * SetCreate(size_t size, int*arr){
     int amountOfBytesReserved = (sizeof(Set));
 
     /*
@@ -43,7 +43,7 @@ Set * SetCreate(unsigned int size, int*arr){
 // Prints out the values and addresses of the members
 void SetPrintValues(Set * s){
     printf("Address of s: %p\n",s);
-    printf("Size is set to: %d\n",s->size);
+    printf("Size is set to: %d\n",(int)s->size);
     printf("Allocated memory for p_list: %d\n",s->allocated_size);
     for (int i = 0; i < s->size; i++){
         printf("Value at i: %d\n",s->p_list[i]);

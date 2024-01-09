@@ -1,17 +1,18 @@
-
+#include<stddef.h>
 //--------Generic Algorithms----------------
 unsigned int nextPowerOfTwo(unsigned int a);
 
 //--------Sorting Algorithms----------------
-int bubbleSort(int * arr, unsigned int size);
-int selectionSort(int * arr, unsigned int size);
+int bubbleSort(int * arr, size_t size);
+int selectionSort(int * arr, size_t size);
+int insertionSort(int * arr, size_t size);
 
 //--------Generic Array Operations----------
-int compareParallelArrs(int * arr_a, int * arr_b, unsigned int size);
+int compareParallelArrs(int * arr_a, int * arr_b, size_t size);
 
 //--------Set Structure---------------------
 typedef struct Set Set;
-Set * SetCreate(unsigned int size, int * arr);
+Set * SetCreate(size_t size, int * arr);
 int * SetArr(Set * s);
 unsigned int SetSize(Set * s);
 unsigned int SetArrMemSize(Set * s);

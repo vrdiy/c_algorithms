@@ -1,9 +1,9 @@
-#include"c_algorithms.h"
 #include<stdbool.h>
+#include"c_algorithms.h"
 /*
     This algorithm takes an array of integers and sorts them in place, in quadratic time, or O(n^2)
 */
-int bubbleSort(int * arr, unsigned int size){
+int bubbleSort(int * arr, size_t size){
     if (size<2){
         return 1;
     }
@@ -25,7 +25,7 @@ int bubbleSort(int * arr, unsigned int size){
     return 1;
 }
 
-int selectionSort(int * arr, unsigned int size){
+int selectionSort(int * arr, size_t size){
     if (size<2){
         return 1;
     }
@@ -44,5 +44,26 @@ int selectionSort(int * arr, unsigned int size){
         current_pos += 1;
     }
     return 1;
-
 }
+
+int insertionSort(int * arr, size_t size){
+    if (size < 2){
+        return 1;
+    }
+    for (int i = 1; i < size; i++){
+        unsigned int current_pos = i;
+        int temp = arr[i];
+        if(arr[current_pos-1] < temp){
+            // Value is already in order
+        }else{
+            while(arr[current_pos - 1] > temp){
+                arr[current_pos] = arr[current_pos - 1];
+                current_pos -= 1;
+                if(current_pos == 0){
+                    break;
+                }
+            }
+            arr[current_pos] = temp;
+        }
+    }
+};
