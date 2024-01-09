@@ -33,6 +33,16 @@ START_TEST (SELECTION_WORST_CASE_SCENARIO)
 
 }
 END_TEST
+START_TEST (SELECTION_LAST_IS_HIGH)
+{
+    int arr[5] = {5,4,3,2,6};
+    int sorted_arr[5] = {2,3,4,5,6};
+    ck_assert_int_eq(-1,compareParallelArrs(arr,sorted_arr,5));
+    selectionSort(arr,5);
+    ck_assert_int_eq(1,compareParallelArrs(arr,sorted_arr,5));
+
+}
+END_TEST
 Suite * sorting_suite(void){
     Suite *s;
     s = suite_create("Check Sorting");
@@ -45,6 +55,8 @@ Suite * sorting_suite(void){
     TCase *tc_selection;
     tc_selection = tcase_create("Selection Sort");
     tcase_add_test(tc_selection,SELECTION_WORST_CASE_SCENARIO);
+    tcase_add_test(tc_selection,SELECTION_LAST_IS_HIGH);
+
 
     suite_add_tcase(s, tc_bubble);
     suite_add_tcase(s, tc_selection);
